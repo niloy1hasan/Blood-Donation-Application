@@ -9,10 +9,14 @@
 @plugin 'daisyui/theme' {
   name: "light";
   default: true;
-  /* --color-primary: #; */
+  --color-primary: #c00108;
 }
 
 @theme {
   --font-urbanist: "Urbanist", sans-serif;
   --font-inter: "Inter", sans-serif;
+  --color-gray-bg: #EAEAEA;
+  --color-lightred-bg: #f6e8e8;
+  --color-red-bold: #811719;
+  --color-red: #c00108;
 }
