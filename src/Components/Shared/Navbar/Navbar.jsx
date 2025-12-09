@@ -44,7 +44,7 @@ const mobileNavMenu = <>
     </>;
     return (
         <>
-    <nav className="font-urbanist select-none bg-linear-to-b from-gray-bg to-lightred-bg/80 w-full">
+    <nav className="font-urbanist sticky top-0 z-50 select-none bg-linear-to-b from-gray-bg to-lightred-bg w-full">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
           <div className="flex-1 flex items-center mr-5 justify-center sm:items-stretch sm:justify-start">
@@ -55,29 +55,29 @@ const mobileNavMenu = <>
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:block sm:ml-6">
+            <div className="hidden lg:block sm:ml-6">
               <div className="flex space-x-3">
                 {navMenu}
               </div>
             </div>
           </div>
 
-          <div class="hidden md:block h-6 w-px bg-zinc-500/40"></div>
+          <div class="hidden lg:block h-6 w-px bg-zinc-500/40"></div>
 
 
           {/* Right side */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <div className="hidden sm:flex sm:items-center">
-              <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold" href="#">
+            <div className="flex sm:items-center">
+              <NavLink to={'/login'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
                 Login
-              </a>
-              <a className="ml-4 bg-linear-to-r from-red-600 to-red-800 text-white px-4 py-2 rounded-md text-sm font-bold hover:from-red-700 hover:to-red-900" href="#">
+              </NavLink>
+              <NavLink to={'/register'} className="ml-4 bg-linear-to-r from-red-600 to-red-800 text-white px-4 py-2 rounded-md text-sm font-bold hover:from-red-700 hover:to-red-900">
                 register
-              </a>
+              </NavLink>
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="sm:hidden">
+            <div className="lg:hidden ml-5">
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -94,17 +94,17 @@ const mobileNavMenu = <>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="sm:hidden px-2 pt-2 pb-3 space-y-1">
+        <div className="lg:hidden px-2 pt-2 pb-3 space-y-1">
           {mobileNavMenu}
 
           <div className="pt-4 pb-3 border-t border-gray-200">
             <div className="flex items-center px-3 space-y-2 flex-col">
-              <a className="block w-full text-center text-gray-900 bg-gray-100 px-solutions py-2 rounded-md text-base font-medium" href="#">
+              <NavLink to={'/login'} className="block w-full text-center text-gray-900 bg-gray-100 px-solutions py-2 rounded-md text-base font-medium">
                 Login
-              </a>
-              <a className="block w-full text-center bg-linear-to-r from-red-600 to-red-800 text-white px-3 py-2 rounded-md text-base font-medium" href="#">
+              </NavLink>
+              <NavLink to={'/register'} className="block w-full text-center bg-linear-to-r from-red-600 to-red-800 text-white px-3 py-2 rounded-md text-base font-medium">
                 register
-              </a>
+              </NavLink>
             </div>
           </div>
         </div>
