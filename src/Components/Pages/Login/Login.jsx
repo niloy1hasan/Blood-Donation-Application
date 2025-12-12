@@ -1,27 +1,76 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { IoEnter } from "react-icons/io5";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
+import { AuthContext } from "../../../Context/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
+  const { loginUser, googleSignIn } = use(AuthContext);
+
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password) => password.length >= 8;
 
-  const handleSubmit = (e) => {
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
+  }
+
+    const handleLogin = (e) => {
     e.preventDefault();
     setLoading(true);
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    if (!email && !password) {
+      toast.warn('write both email and password');
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.warn('email is not valid');
+      return;
+    }
+    if (!validatePassword(password)) {
+      toast.warn('password is not valid');
+      return;
+    }
+    
+    loginUser(email, password)
+    .then(result => {
+      console.log(result);
+      resetForm();
+      navigate('/');
+    })
+    .catch(error => {
+      console.log(error);
+      toast.error('Invalid Email and Password');
+    })
+
+    .finally(() => setLoading(false));
+  }
+
+  const handleGoogleSignin = () => {
+    setLoading(true);
+    googleSignIn()
+      .then(() => {
+        navigate('/');
+      })
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
   };
 
   return (
-    <div className="md:min-h-screen font-inter bg-gray-100 flex">
+    <div className="min-h-screen font-inter bg-gray-100 flex">
       <div className="w-full flex justify-center md:p-8">
-        <div className="w-full max-w-xl">
-          <div className="bg-white md:rounded-2xl shadow-xl p-6 md:p-8">
+        <div className="w-full md:max-w-xl">
+          <div className="bg-white md:rounded-2xl h-full w-full md:w-auto md:h-auto shadow-xl p-6 md:p-8">
             <div className="text-center mb-6">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
                 <IoEnter className="text-red-600 text-3xl" />
@@ -32,7 +81,7 @@ const Login = () => {
 
             
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleLogin}>
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address
@@ -40,6 +89,7 @@ const Login = () => {
                 <div className="relative">
                   <input
                     type="email"
+                    name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -67,6 +117,7 @@ const Login = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
+                    name="password"
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     className="w-full px-2 py-3 outline-none"
@@ -136,7 +187,7 @@ const Login = () => {
             <div className="divider font-inter my-8 text-sm">OR</div>
 
                 <div className="flex flex-col w-full gap-3">
-            <button
+            <button onClick={handleGoogleSignin}
           className="w-full flex items-center justify-center border border-gray-200 rounded-lg shadow-lg
           px-8 py-2.5 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 
           hover:shadow-2xl active:translate-y-0 bg-white text-gray-800"
@@ -195,6 +246,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <ToastContainer hideProgressBar />
     </div>
   );
 };

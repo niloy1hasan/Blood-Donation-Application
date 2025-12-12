@@ -1,9 +1,11 @@
 import React, { use, useEffect, useRef, useState } from "react";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 import { TiUserAdd } from "react-icons/ti";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import default_img from "../../../assets/profile-picture.png";
 import { AuthContext } from "../../../Context/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
+import axios from "axios";
 
 const loadDistricts = async () => {
   try {
@@ -28,7 +30,7 @@ const loadUpazilas = async () => {
 };
 
 const Register = () => {
-  const { setUser, createUser, googleSignIn } = use(AuthContext);
+  const { setUser, createUser, googleSignIn, updateUserProfile } = use(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -38,12 +40,15 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [bloodGroup, setBloodGroup] = useState("");
+  const [gender, setGender] = useState("");
   const [district, setDistrict] = useState("");
   const [upazila, setUpazila] = useState("");
   const [districtName, setDistrictName] = useState([]);
   const [upazilaName, setUpazilaName] = useState([]);
 
   const fileInputRef = useRef();
+  const conditionsRef = useRef();
+  const navigate = useNavigate();
 
   const handleImageClick = () => {
     fileInputRef.current.click();
@@ -54,6 +59,19 @@ const Register = () => {
       setAvatar(e.target.files[0]);
     }
   };
+
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setName("");
+    setAvatar(null);
+    setBloodGroup("");
+    setGender("");
+    setDistrict("");
+    setUpazila("");
+    conditionsRef.current.checked = false;
+  }
 
   useEffect(() => {
     const fetchDistricts = async () => {
@@ -79,50 +97,91 @@ const Register = () => {
   const validatePassword = (password) => password.length >= 8;
   const validateConfirmPassword = () => password === confirmPassword;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    if (!email && !password) {
+  try {
+    if (!email || !password) {
+      setLoading(false);
       return;
     }
 
     if (!validateEmail(email)) {
+      setLoading(false);
       return;
     }
+
     if (!validatePassword(password)) {
+      setLoading(false);
       return;
     }
 
-    if (!validateConfirmPassword) {
+    if (!validateConfirmPassword()) {
+      setLoading(false);
       return;
     }
 
-    createUser(email, password)
-      .then((result) => {
-        e.target.reset();
-        console.log(result);
-        setUser({ email: email });
-      })
-      .catch((e) => console.error(e))
-      .finally(() => setLoading(false));
-  };
+    if (!e.target.acceptConditions.checked) {
+      toast.warn("Please Accept our terms and conditions");
+      setLoading(false);
+      return;
+    }
+
+    await createUser(email, password);
+    const imageURL = avatar ? await uploadImage() : "";
+
+    const profile = {
+      displayName: name,
+      photoURL: imageURL,
+    };
+
+    await updateUserProfile(profile);
+
+    setUser({
+      displayName: name,
+      email,
+      photoURL: imageURL || default_img,
+    });
+
+    resetForm();
+    navigate('/');
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  const uploadImage = async () => {
+  const formData = new FormData();
+  formData.append("image", avatar);
+
+  const img_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_host_Key}`;
+  const res = await axios.post(img_API_URL, formData);
+
+  return res.data.data.url;
+};
+
 
   const handleGoogleSignin = () => {
     setLoading(true);
     googleSignIn()
       .then((result) => {
         console.log(result);
+        resetForm();
+        navigate('/');
       })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   };
 
   return (
-    <div className="md:min-h-screen font-inter bg-gray-100 flex">
+    <div className="min-h-screen font-inter bg-gray-100 flex">
       <div className="w-full flex justify-center md:p-8">
-        <div className="w-full max-w-xl">
-          <div className="bg-white md:rounded-2xl shadow-xl p-6 md:p-8">
+        <div className="w-full md:max-w-xl">
+          <div className="bg-white md:rounded-2xl h-full w-full md:w-auto md:h-auto shadow-xl p-6 md:p-8">
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
                 <TiUserAdd className="text-red-600 text-3xl" />
@@ -203,6 +262,31 @@ const Register = () => {
                     Select Blood Group
                   </option>
                   {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
+                    (type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    )
+                  )}
+                </select>
+              </div>
+
+              {/* Gender */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Gender
+                </label>
+                <select
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 
+                      focus:ring-2 focus:ring-red-600 focus:border-transparent transition-colors"
+                >
+                  <option value="" selected disabled>
+                    Select Gender
+                  </option>
+                  {["Male", "Female", "Others"].map(
                     (type) => (
                       <option key={type} value={type}>
                         {type}
@@ -347,6 +431,7 @@ const Register = () => {
               <div className="mb-6 flex text-sm items-center select-none gap-2">
                 <input
                   type="checkbox"
+                  ref={conditionsRef}
                   name="acceptConditions"
                   className="checkbox h-5 w-5 border-red-500 checked:bg-red-600 text-white"
                   id="acceptConditions"
@@ -474,6 +559,7 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <ToastContainer hideProgressBar />
     </div>
   );
 };
