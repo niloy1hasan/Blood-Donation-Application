@@ -136,7 +136,7 @@ const logoutModal = useRef();
 
         <div>
           <h2 className="font-semibold text-nowrap">{user.displayName}</h2>
-          <p className="text-[12px] font-urbanist select-all text-nowrap text-gray-400">{user.email}</p>
+          <p className="text-[12px] font-urbanist text-nowrap text-gray-400">{user.email}</p>
         </div>
           </div>
           <div className="h-px bg-zinc-200 my-2"></div>
