@@ -30,7 +30,7 @@ const loadUpazilas = async () => {
 };
 
 const Register = () => {
-  const { setUser, createUser, googleSignIn, updateUserProfile } = use(AuthContext);
+  const { setUser, createUser, googleSignIn, updateUserProfile, addUserOnDb, isUserExist } = use(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -128,6 +128,16 @@ const Register = () => {
       return;
     }
 
+
+    const exist = await isUserExist(email);
+
+    if(exist.data && Object.keys(exist.data).length > 0){
+      toast.warn("User already exists");
+      setLoading(false);
+      resetForm();
+      return;
+    }
+
     await createUser(email, password);
     const imageURL = avatar ? await uploadImage() : "";
 
@@ -137,11 +147,23 @@ const Register = () => {
     };
 
     await updateUserProfile(profile);
+  
+    const newUser = {
+      ...profile,
+      email,
+      gender,
+      bloodGroup,
+      district,
+      upazila,
+      loginProvider: ['email'],
+    };
+    addUserOnDb(newUser);
 
     setUser({
       displayName: name,
       email,
       photoURL: imageURL || default_img,
+      role: 'donor'
     });
 
     resetForm();
@@ -164,16 +186,34 @@ const Register = () => {
   return res.data.data.url;
 };
 
-
   const handleGoogleSignin = () => {
     setLoading(true);
     googleSignIn()
-      .then((result) => {
-        console.log(result);
+      .then(async(result) => {
         resetForm();
+
+        const user = result.user;
+        const exist = await isUserExist(user.email);
+        if(!(exist.data && Object.keys(exist.data).length > 0)){
+          const newUser = {
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL || null,
+          gender,
+          bloodGroup,
+          district,
+          upazila,
+          loginProvider: ['google'],
+        };
+        addUserOnDb(newUser);
+        }
+        
         navigate('/');
       })
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        console.error(error);
+        toast.error("Something is Wrong!");
+      })
       .finally(() => setLoading(false));
   };
 

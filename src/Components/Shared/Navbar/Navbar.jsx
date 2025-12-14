@@ -140,12 +140,9 @@ const logoutModal = useRef();
         </div>
           </div>
           <div className="h-px bg-zinc-200 my-2"></div>
-        <li>
-          <a>
-            <CiUser size={16} /> Profile
-            </a>
-        </li>
-        <li className='w-auto text-nowrap'><NavLink><IoIosGitPullRequest size={16} /> Donation Requests</NavLink></li>
+        <li><a><CiUser size={16} /> Dashboard</a></li>
+        <li><a><CiUser size={16} /> Profile</a></li>
+        <li className='w-auto text-nowrap break-after-avoid'><NavLink><IoIosGitPullRequest size={16} /> Donation Requests</NavLink></li>
         <li className='w-auto text-nowrap'><NavLink><IoIosGitPullRequest size={16} /> Request for Blood</NavLink></li>
         {/* <li><NavLink><RiExchangeFundsLine size={16} /> Fund</NavLink></li> */}
         <div className="h-px bg-zinc-200 my-2"></div>

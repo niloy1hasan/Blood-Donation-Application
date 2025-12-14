@@ -6,7 +6,7 @@ import { AuthContext } from "../../../Context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
-  const { loginUser, googleSignIn } = use(AuthContext);
+  const { loginUser, googleSignIn, addUserOnDb, isUserExist } = use(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -59,7 +59,25 @@ const Login = () => {
   const handleGoogleSignin = () => {
     setLoading(true);
     googleSignIn()
-      .then(() => {
+      .then(async(result) => {
+       resetForm();
+
+        const user = result.user;
+        const exist = await isUserExist(user.email);
+        if(!(exist.data && Object.keys(exist.data).length > 0)){
+          const newUser = {
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL || null,
+          gender : '',
+          bloodGroup : '',
+          district : '',
+          upazila : '',
+          loginProvider: ['google'],
+        };
+        addUserOnDb(newUser);
+        }
+        
         navigate('/');
       })
       .catch((error) => console.error(error))

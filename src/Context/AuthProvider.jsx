@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { auth } from '../Firebase/firebase.config';
 import { AuthContext } from './AuthContext';
+import axios from 'axios';
 
 const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({children}) => {
@@ -32,6 +33,41 @@ const AuthProvider = ({children}) => {
         return updateProfile(auth.currentUser, profile);
     }
 
+    const addUserOnDb = (newUser) => {
+    const url = 'http://localhost:3000/users';
+
+    try {
+        const res = axios.post(url, newUser);
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+    };
+
+
+    // const isUserExist = async (email) => {
+    //     try {
+    //         const url = `http://localhost:3000/users/${encodeURIComponent(email)}`;
+    //         const response = await axios.get(url);
+
+    //         return !!response.data;
+    //     } catch (error) {
+    //         if (error.response?.status === 404) {
+    //         return false;
+    //         }
+    //         console.error(error);
+    //         return false;
+    //     }
+    // };
+
+
+        const isUserExist = (email) => {
+            const url = `http://localhost:3000/users/${encodeURIComponent(email)}`;
+            return axios.get(url);
+        }
+
 
     useEffect(()=>{
         const unsubscribe = onAuthStateChanged(auth, (currentUser)=>{
@@ -52,7 +88,9 @@ const AuthProvider = ({children}) => {
         loginUser,
         googleSignIn,
         logoutUser,
-        updateUserProfile
+        updateUserProfile,
+        addUserOnDb,
+        isUserExist
     };
     return (
         <AuthContext value={authInfo}>
