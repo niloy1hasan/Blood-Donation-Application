@@ -47,22 +47,6 @@ const AuthProvider = ({children}) => {
     };
 
 
-    // const isUserExist = async (email) => {
-    //     try {
-    //         const url = `http://localhost:3000/users/${encodeURIComponent(email)}`;
-    //         const response = await axios.get(url);
-
-    //         return !!response.data;
-    //     } catch (error) {
-    //         if (error.response?.status === 404) {
-    //         return false;
-    //         }
-    //         console.error(error);
-    //         return false;
-    //     }
-    // };
-
-
         const isUserExist = (email) => {
             const url = `http://localhost:3000/users/${encodeURIComponent(email)}`;
             return axios.get(url);

@@ -6,7 +6,7 @@ import { CiUser } from 'react-icons/ci';
 import { IoIosGitPullRequest, IoIosLogOut } from 'react-icons/io';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { TfiHelpAlt } from 'react-icons/tfi';
-import { RiExchangeFundsLine } from 'react-icons/ri';
+import { RxDashboard } from "react-icons/rx";
 import { MdError } from 'react-icons/md';
 
 const Navbar = () => {
@@ -20,9 +20,9 @@ const Navbar = () => {
                   Home
                 </NavLink>
 
-                <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold" href="#">
+                <NavLink to={'/search-donor'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
                   Search Donor
-                </a>
+                </NavLink>
                 <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold" href="#">
                   Donation Requests
                 </a>
@@ -40,9 +40,9 @@ const mobileNavMenu = <>
             Home
           </NavLink>
 
-          <a className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium" href="#">
+          <NavLink to={'/search-donor'} className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">
             Search Donor
-          </a>
+          </NavLink>
           <a className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium" href="#">
             Donation Requests
           </a>
@@ -77,7 +77,7 @@ const logoutModal = useRef();
           <div className="flex-1 flex items-center mr-5 justify-center sm:items-stretch sm:justify-start">
             <div className="shrink-0 flex-1 flex items-center">
               <NavLink to={'/'}>
-              <span className="ml-2 text-xl select-none font-bold text-gray-800">BloodBank</span>
+              <span className="ml-2 text-xl select-none font-bold text-gray-800">Blood<span className="text-red-600">Bank</span></span>
               </NavLink>
             </div>
 
@@ -140,13 +140,13 @@ const logoutModal = useRef();
         </div>
           </div>
           <div className="h-px bg-zinc-200 my-2"></div>
-        <li><a><CiUser size={16} /> Dashboard</a></li>
+        <li><NavLink to={'/dashboard'}><RxDashboard size={16} /> Dashboard</NavLink></li>
         <li><a><CiUser size={16} /> Profile</a></li>
-        <li className='w-auto text-nowrap break-after-avoid'><NavLink><IoIosGitPullRequest size={16} /> Donation Requests</NavLink></li>
-        <li className='w-auto text-nowrap'><NavLink><IoIosGitPullRequest size={16} /> Request for Blood</NavLink></li>
+        <li className='w-max'><NavLink><IoIosGitPullRequest size={16} /> Donation Requests</NavLink></li>
+        <li className='w-max'><NavLink><IoIosGitPullRequest size={16} /> Request for Blood</NavLink></li>
         {/* <li><NavLink><RiExchangeFundsLine size={16} /> Fund</NavLink></li> */}
         <div className="h-px bg-zinc-200 my-2"></div>
-        <li className='w-auto text-nowrap'><a><TfiHelpAlt size={16} /> Help and Support</a></li>
+        <li className='w-max'><a><TfiHelpAlt size={16} /> Help and Support</a></li>
         <li><a><IoSettingsOutline size={16} /> Settings</a></li>
         <li><a onClick={()=>{logoutModal.current?.showModal()}}><IoIosLogOut size={16} /> Logout</a></li>
       </ul>
