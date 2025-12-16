@@ -8,6 +8,7 @@ import SearchDonor from '../Components/Pages/SearchDonor/SearchDonor';
 import DashboardLayout from '../Layout/DashboardLayout/DashboardLayout';
 import Dashboard from '../Components/Pages/Dashboard/Dashboard';
 import Profile from '../Components/Pages/Profile/Profile';
+import PrivateRoutes from './PrivateRoutes';
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,10 @@ const router = createBrowserRouter([
         Component: SearchDonor
       }, {
         path: '/dashboard',
-        Component: DashboardLayout,
+        element: 
+        <PrivateRoutes>
+          <DashboardLayout></DashboardLayout>
+        </PrivateRoutes>,
         children: [
           {
             index: true,
