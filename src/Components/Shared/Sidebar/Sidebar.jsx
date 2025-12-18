@@ -7,11 +7,10 @@ import { NavLink, useLocation } from 'react-router';
 const Sidebar = () => {
         const { user } = use(AuthContext);
         const location = useLocation();
-        console.log(user);
         const menuItems = [
             { icon: <FiHome />, label: "Dashboard", path: "/dashboard" },
-            { icon: <FiUsers />, label: "Users" },
-            { icon: <FiGitPullRequest />, label: "Requests" },
+            { icon: <FiUsers />, label: "Users", path: "/dashboard/all-users"},
+            { icon: <FiGitPullRequest />, label: "Requests", path: '/dashboard/all-blood-donation-request' },
             { icon: <FiUser />, label: "Profile", path: "/dashboard/profile"},
             { icon: <FiSettings />, label: "Settings" },
           ];
@@ -20,7 +19,7 @@ const Sidebar = () => {
                 <div className="flex items-center justify-center h-16 px-4 bg-red-900 text-xl font-semibold">
                   BloodBank
                 </div>
-                <div className="flex items-center justify-center h-16 px-4 bg-red-900 text-xl font-semibold">
+                <div className="hidden lg:flex items-center justify-center h-16 px-4 bg-red-900 text-xl font-semibold">
                   BloodBank
                 </div>
                 <nav className="flex-1 px-4 py-4 overflow-y-auto space-y-2">
@@ -28,7 +27,7 @@ const Sidebar = () => {
                     <NavLink
                       key={item.label}
                       to={item.path}
-                      className={`flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-red-700 ${location.pathname===item.path && 'bg-red-700'}`}
+                      className={`flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-red-700/80 ${location.pathname===item.path && 'bg-red-700'}`}
                     >
                       <span className="mr-3 text-lg">{item.icon}</span>
                       <span className='hidden lg:block'>{item.label}</span>

@@ -9,6 +9,8 @@ import DashboardLayout from '../Layout/DashboardLayout/DashboardLayout';
 import Dashboard from '../Components/Pages/Dashboard/Dashboard';
 import Profile from '../Components/Pages/Profile/Profile';
 import PrivateRoutes from './PrivateRoutes';
+import AllUsers from '../Components/Pages/AllUsers/AllUsers';
+import DonationRequest from '../Components/Pages/DonationRequest/DonationRequest';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,14 @@ const router = createBrowserRouter([
           {
             index: true,
             Component: Dashboard
+          },
+          {
+            path: '/dashboard/all-users',
+            Component: AllUsers
+          },
+          {
+            path: '/dashboard/all-blood-donation-request',
+            Component: DonationRequest
           },
           {
             path: '/dashboard/profile',

@@ -34,7 +34,7 @@ const AuthProvider = ({children}) => {
     }
 
     const addUserOnDb = (newUser) => {
-    const url = 'http://localhost:3000/users';
+    const url = 'https://blood-donation-application-server-eight.vercel.app/users';
 
     try {
         const res = axios.post(url, newUser);
@@ -48,7 +48,7 @@ const AuthProvider = ({children}) => {
 
 
         const isUserExist = (email) => {
-            const url = `http://localhost:3000/users/${encodeURIComponent(email)}`;
+            const url = `https://blood-donation-application-server-eight.vercel.app/users/${encodeURIComponent(email)}`;
             return axios.get(url);
         }
 
