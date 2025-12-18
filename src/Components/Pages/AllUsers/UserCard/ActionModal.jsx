@@ -48,10 +48,10 @@ const ActionModal = forwardRef(({ onClose, handleBlockUser, user, handleVoluntee
           <button onClick={()=>{onClose(); handleBlockUser(user.email)}} className="flex flex-col gap-1 p-2 hover:bg-red-50 rounded-lg">
             <div className="flex items-center gap-3 text-red-600">
               <RiUserForbidLine size={24} />
-              <span className="font-medium">{user?.status === 'Blocked' ? 'Unblock' : 'Block'}</span>
+              <span className="font-medium">{user?.status === 'blocked' ? 'Unblock' : 'Block'}</span>
             </div>
             <p className="text-xs text-red-500">
-              {user?.status === 'Blocked' ? 'Unblock this user.' : 'Block this user from the platform.'} 
+              {user?.status === 'blocked' ? 'Unblock this user.' : 'Block this user from the platform.'} 
             </p>
           </button>
 

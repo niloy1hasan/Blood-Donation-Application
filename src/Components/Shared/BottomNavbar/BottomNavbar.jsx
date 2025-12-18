@@ -9,8 +9,8 @@ const BottomNavbar = () => {
     
         const menuItems = [
                     { icon: <FiHome />, label: "Dashboard", path: "/dashboard" },
-                    { icon: <FiUsers />, label: "Users" },
-                    { icon: <FiGitPullRequest />, label: "Requests" },
+                    { icon: <FiUsers />, label: "Users", path: "/dashboard/all-users"},
+                    { icon: <FiGitPullRequest />, label: "Requests", path: "/dashboard/all-blood-donation-request" },
                     { icon: <FiUser />, label: "Profile", path: "/dashboard/profile"},
                     { icon: <FiSettings />, label: "Settings" },
                   ];

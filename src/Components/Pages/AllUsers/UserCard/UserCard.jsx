@@ -22,7 +22,7 @@ const UserCard = ({ user, showActionModal }) => {
             <span className="badge badge-outline text-[11px] text-red-600">
               {user.role}
             </span>
-            <span className={`badge badge-outline text-[11px] ${user.status === 'Blocked' ? 'text-red-600' : 'text-green-600'}`}>
+            <span className={`badge badge-outline text-[11px] ${user.status === 'blocked' ? 'text-red-600' : 'text-green-600'}`}>
               {user.status}
             </span>
           </div>

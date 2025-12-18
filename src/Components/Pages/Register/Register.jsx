@@ -196,7 +196,7 @@ const Register = () => {
         const exist = await isUserExist(user.email);
         if(!(exist.data && Object.keys(exist.data).length > 0)){
           const newUser = {
-          name: user.displayName,
+          displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL || null,
           gender,

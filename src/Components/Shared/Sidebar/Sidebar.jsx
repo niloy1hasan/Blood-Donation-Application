@@ -37,7 +37,7 @@ const Sidebar = () => {
                 
                   
                 {user && <div className='flex fixed left-5 bottom-0 justify-center bg-red-800 items-center my-2 gap-2.5'>
-                    <img className='rounded-full w-9 h-9' src={user?.photoURL || default_img} alt="" />
+                    <img className='rounded-full w-9 h-9 object-cover' src={user?.photoURL || default_img} alt="" />
                     <div className='hidden lg:block'>
                         <h2 className='font-semibold'>{user?.displayName || 'username'}</h2>
                         <p className='text-sm '>{user?.email || 'email'}</p>

@@ -23,9 +23,9 @@ const Navbar = () => {
                 <NavLink to={'/search-donor'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
                   Search Donor
                 </NavLink>
-                <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold" href="#">
+                <NavLink to={'/dashboard/all-blood-donation-request'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
                   Donation Requests
-                </a>
+                </NavLink>
                 <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold" href="#">
                   About
                 </a>
@@ -43,9 +43,9 @@ const mobileNavMenu = <>
           <NavLink to={'/search-donor'} className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">
             Search Donor
           </NavLink>
-          <a className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium" href="#">
+          <NavLink to={'/dashboard/all-blood-donation-request'} className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">
             Donation Requests
-          </a>
+          </NavLink>
           <a className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium" href="#">
             About
           </a>
@@ -130,7 +130,7 @@ const logoutModal = useRef();
           <div className="flex items-center gap-3">
              <div className="w-9 h-9">
             <img
-            className="rounded-full h-9 w-9"
+            className="rounded-full h-9 w-9 object-cover"
               src={user.photoURL ? user.photoURL : default_img} />
         </div> 
 
@@ -141,8 +141,8 @@ const logoutModal = useRef();
           </div>
           <div className="h-px bg-zinc-200 my-2"></div>
         <li><NavLink to={'/dashboard'}><RxDashboard size={16} /> Dashboard</NavLink></li>
-        <li><a><CiUser size={16} /> Profile</a></li>
-        <li className='w-max'><NavLink><IoIosGitPullRequest size={16} /> Donation Requests</NavLink></li>
+        <li><NavLink to={'/dashboard/profile'}><CiUser size={16} /> Profile</NavLink></li>
+        <li className='w-max'><NavLink to={'/dashboard/all-blood-donation-request'}><IoIosGitPullRequest size={16} /> Donation Requests</NavLink></li>
         <li className='w-max'><NavLink><IoIosGitPullRequest size={16} /> Request for Blood</NavLink></li>
         {/* <li><NavLink><RiExchangeFundsLine size={16} /> Fund</NavLink></li> */}
         <div className="h-px bg-zinc-200 my-2"></div>
