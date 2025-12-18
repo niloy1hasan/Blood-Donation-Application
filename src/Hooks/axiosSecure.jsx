@@ -1,0 +1,47 @@
+import axios from 'axios';
+import React, { use, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { AuthContext } from '../Context/AuthContext';
+
+const axiosSecure = axios.create({
+    baseURL: 'https://blood-donation-application-server-eight.vercel.app'
+})
+
+const useAxiosSecure = () => {
+    const { user, loginUser } = use(AuthContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const reqInterceptor = axiosSecure.interceptors.request.use(config => {
+            config.headers.Authorization = `Bearer ${user?.accessToken}`
+            return config
+        })
+
+        const resInterceptor = axiosSecure.interceptors.response.use((response) => {
+            return response;
+        }, (error) => {
+            console.log(error);
+
+            const statusCode = error.status;
+            if (statusCode === 401 || statusCode === 403) {
+                loginUser()
+                    .then(() => {
+                        navigate('/login')
+                    })
+            }
+
+
+            return Promise.reject(error);
+        })
+
+        return () => {
+            axiosSecure.interceptors.request.eject(reqInterceptor);
+            axiosSecure.interceptors.response.eject(resInterceptor);
+        }
+
+    }, [user, loginUser, navigate])
+
+    return axiosSecure;
+};
+
+export default useAxiosSecure;

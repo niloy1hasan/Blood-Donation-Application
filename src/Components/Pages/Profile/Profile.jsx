@@ -125,7 +125,7 @@ const handleFileChange = (e) => {
   try {
     const uploadedURL = await uploadImage();
 
-    const url = `https://blood-donation-application-server-eight.vercel.app/user/${user.email}`;
+    const url = `https://blood-donation-application-server-eight.vercel.app/user/update/${user.email}`;
     const payload = {
       photoURL: uploadedURL,
       displayName: formData.displayName?.trim() || user.displayName,

@@ -1,27 +1,30 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { FiHome, FiUsers, FiSettings, FiUser, FiMenu, FiGitPullRequest } from "react-icons/fi";
 import { AuthContext } from '../../../Context/AuthContext';
 import { NavLink, useLocation } from 'react-router';
 const BottomNavbar = () => {
-        // const { user } = use(AuthContext);
+        const { user } = use(AuthContext);
         const [drawerOpen, setDrawerOpen ] = useState(false);
         const location = useLocation();
     
         const menuItems = [
-                    { icon: <FiHome />, label: "Dashboard", path: "/dashboard" },
-                    { icon: <FiUsers />, label: "Users", path: "/dashboard/all-users"},
-                    { icon: <FiGitPullRequest />, label: "Requests", path: "/dashboard/all-blood-donation-request" },
-                    { icon: <FiUser />, label: "Profile", path: "/dashboard/profile"},
-                    { icon: <FiSettings />, label: "Settings" },
+                    { icon: <FiHome />, label: "Dashboard", path: "/dashboard", role: ['admin', 'donor', 'volunteer'] },
+                    { icon: <FiUsers />, label: "Users", path: "/dashboard/all-users", role: ['admin'] },
+                    { icon: <FiGitPullRequest />, label: "My Requests", path: '/dashboard/my-donation-requests', role: ['donor', 'volunteer'] },
+                    { icon: <FiGitPullRequest />, label: "Requests", path: '/dashboard/all-blood-donation-request', role: ['admin', 'volunteer'] },
+                    { icon: <FiGitPullRequest />, label: "Create Request", path: "/dashboard/create-donation-request", role: ['admin', 'donor', 'volunteer'] },
+                    { icon: <FiUser />, label: "Profile", path: "/dashboard/profile", role: ['admin', 'donor', 'volunteer'] },
+                    { icon: <FiSettings />, label: "Settings", role: ['admin', 'donor', 'volunteer'] },
                   ];
     return (
        <>
         <nav className="fixed bottom-0 left-0 right-0 md:hidden bg-white border-t border-gray-200 flex justify-around py-2">
-        {menuItems.slice(0, 4).map((item) => (
+        {menuItems.filter(item => item.role.includes(user?.role)).slice(0, 4).map((item) => (
+          item.role.includes(user?.role) && (
           <NavLink to={item.path} key={item.label} className={`flex flex-col py-1.5 items-center text-gray-600 ${location.pathname===item.path && 'text-red'}`}>
             {item.icon}
             <span className="text-xs">{item.label}</span>
-          </NavLink>
+          </NavLink>)
         ))}
         <button
           className="flex flex-col py-1.5 items-center text-gray-600"
@@ -42,6 +45,7 @@ const BottomNavbar = () => {
               ✕
             </button>
             {menuItems.map((item) => (
+              item.role.includes(user?.role) && (
               <NavLink
                 key={item.label}
                 to={item.path}
@@ -49,7 +53,7 @@ const BottomNavbar = () => {
               >
                 <span className="mr-3 text-lg">{item.icon}</span>
                 {item.label}
-              </NavLink>
+              </NavLink>)
             ))}
           </div>
         </div>

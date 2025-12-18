@@ -11,6 +11,9 @@ import Profile from '../Components/Pages/Profile/Profile';
 import PrivateRoutes from './PrivateRoutes';
 import AllUsers from '../Components/Pages/AllUsers/AllUsers';
 import DonationRequest from '../Components/Pages/DonationRequest/DonationRequest';
+import CreateDonationRequest from '../Components/Pages/CreateDonationRequest/CreateDonationRequest';
+import NotFound from '../Components/NotFound/NotFound';
+import Forbidden from '../Components/Forbidden/Forbidden';
 
 const router = createBrowserRouter([
   {
@@ -52,10 +55,22 @@ const router = createBrowserRouter([
             Component: DonationRequest
           },
           {
+            path: '/dashboard/create-donation-request',
+            Component: CreateDonationRequest
+          },
+          {
             path: '/dashboard/profile',
             Component: Profile
+          },
+          {
+            path: '/dashboard/*',
+            Component: Forbidden
           }
         ]
+      },
+      {
+        path: '/*',
+        Component: NotFound
       }
     ]
   },

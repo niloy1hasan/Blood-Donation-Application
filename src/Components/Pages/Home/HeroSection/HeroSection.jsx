@@ -3,10 +3,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
+import { NavLink } from "react-router";
 
 const HeroSection = () => {
   return (
-    <section className="relative md:h-[calc(100vh+80px)] overflow-hidden z-50 bg-gradient-to-br from-red-900 via-red-800 to-rose-900 text-white">
+    <section className="relative max-h-[1200px] md:h-[calc(100vh+80px)] overflow-hidden z-30 bg-gradient-to-br from-red-900 via-red-800 to-rose-900 text-white">
 
       <div className="absolute inset-0 overflow-hidden">
 
@@ -20,7 +21,7 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-6 lg:px-12 py-24 lg:h-[90vh] flex items-center">
+      <div className="relative max-h-[1200px] z-10 container mx-auto px-6 lg:px-12 py-24 lg:h-[90vh] flex items-center">
         <div className="grid md:grid-cols-2 gap-12 items-center w-full">
           <div className="space-y-8 animate-fade-in">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
@@ -60,15 +61,15 @@ const HeroSection = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="group px-8 py-4 rounded-xl bg-red-600 hover:bg-red-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-red-500/50 hover:scale-105 flex items-center justify-center gap-2">
-                Become a Donor
+              <NavLink to={'/register'} className="group px-8 py-4 rounded-xl bg-red-600 hover:bg-red-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-red-500/50 hover:scale-105 flex items-center justify-center gap-2">
+                Join as a donor
                 <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-              </button>
-              <button className="px-8 py-4 rounded-xl border-2 border-white/30 bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-300 hover:scale-105">
-                Find Blood
-              </button>
+              </NavLink>
+              <NavLink to={'/search-donor'} className="px-8 py-4 rounded-xl border-2 text-center border-white/30 bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-300 hover:scale-105">
+                Search Donors
+              </NavLink>
             </div>
           </div>
 

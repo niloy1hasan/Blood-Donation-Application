@@ -52,10 +52,23 @@ const AuthProvider = ({children}) => {
             return axios.get(url);
         }
 
+        const getDBUser = async(email) => {
+            try {
+                const res = await axios.get(`https://blood-donation-application-server-eight.vercel.app/users/${email}`);
+                return res.data;
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+        }
+
 
     useEffect(()=>{
         const unsubscribe = onAuthStateChanged(auth, (currentUser)=>{
             setUser(currentUser);
+            getDBUser(currentUser.email).then((dbUser) => {
+                setUser(prevUser => ({ ...prevUser, ...dbUser }));
+            });
             setLoading(false);
         })
 
