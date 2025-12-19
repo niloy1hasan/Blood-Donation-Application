@@ -46,11 +46,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/donation-requests/:id',
-        Component: DonationRequestDetails
+        element: <PrivateRoutes>
+          <DonationRequestDetails></DonationRequestDetails>
+        </PrivateRoutes>
       },
       {
         path: '/funding',
-        Component: Funding
+        element: <PrivateRoutes>
+          <Funding></Funding>
+        </PrivateRoutes>
       },
        {
         path: '/dashboard',

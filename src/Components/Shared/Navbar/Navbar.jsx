@@ -23,13 +23,16 @@ const Navbar = () => {
                 <NavLink to={'/search-donor'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
                   Search Donor
                 </NavLink>
-                <NavLink to={'/dashboard/all-blood-donation-request'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
+                <NavLink to={'/all-donation-request'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
                   Donation Requests
                 </NavLink>
-                <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold" href="#">
+                {user && <NavLink to={'/funding'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
+                  Funding
+                </NavLink>}
+                <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
                   About
                 </a>
-                <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold" href="#">
+                <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
                   Contact
                 </a>
         </>;
