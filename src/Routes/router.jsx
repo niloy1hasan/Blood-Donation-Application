@@ -14,6 +14,10 @@ import DonationRequest from '../Components/Pages/DonationRequest/DonationRequest
 import CreateDonationRequest from '../Components/Pages/CreateDonationRequest/CreateDonationRequest';
 import NotFound from '../Components/NotFound/NotFound';
 import Forbidden from '../Components/Forbidden/Forbidden';
+import Funding from '../Components/Pages/Funding/Funding';
+import AllDonationRequest from '../Components/Pages/AllDonationRequest/AllDonationRequest';
+import DonationRequestDetails from '../Components/Pages/DonationRequestDetails/DonationRequestDetails';
+import MyDonationRequest from '../Components/Pages/MyDonationRequest/MyDonationRequest';
 
 const router = createBrowserRouter([
   {
@@ -35,7 +39,20 @@ const router = createBrowserRouter([
       {
         path: '/search-donor',
         Component: SearchDonor
-      }, {
+      },
+      {
+        path: '/all-donation-request',
+        Component: AllDonationRequest
+      },
+      {
+        path: '/donation-requests/:id',
+        Component: DonationRequestDetails
+      },
+      {
+        path: '/funding',
+        Component: Funding
+      },
+       {
         path: '/dashboard',
         element: 
         <PrivateRoutes>
@@ -53,6 +70,10 @@ const router = createBrowserRouter([
           {
             path: '/dashboard/all-blood-donation-request',
             Component: DonationRequest
+          },
+          {
+            path: '/dashboard/my-donation-requests',
+            Component: MyDonationRequest
           },
           {
             path: '/dashboard/create-donation-request',
