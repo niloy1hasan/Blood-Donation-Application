@@ -26,3 +26,9 @@ Firebase
 firebase.config.js
 
 .env
+
+# Firebase / build caches
+.cache/
+firebase-debug.log
+firebase-debug.*.log
+.firebase/hosting.ZGlzdA.cache
