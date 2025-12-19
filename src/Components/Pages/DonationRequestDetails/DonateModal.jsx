@@ -1,19 +1,25 @@
+import axios from "axios";
 import React from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 const DonateModal = ({ user, requestId, onClose }) => {
-  const handleConfirm = async () => {
-    await fetch(
-      `https://blood-donation-application-server-eight.vercel.app/donation-requests/${requestId}`,
-      {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ status: "inprogress" }),
-      }
-    );
+const handleConfirm = async () => {
+  const url = `https://blood-donation-application-server-eight.vercel.app/donation-requests/update-status/${requestId}`;
+  try {
+    const res = await axios.patch(url, { status: "inprogress" });
 
-    onClose();
-    window.location.reload();
-  };
+    if (res.data.success) {
+      toast.success("Donation confirmed successfully!");
+      onClose();
+      window.location.reload();
+    } else {
+      toast.error("Failed to confirm donation. Please try again.");
+    }
+  } catch (error) {
+    toast.error("Failed to confirm donation. Please try again.");
+    console.error("Error confirming donation:", error);  }
+};
+
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -53,6 +59,7 @@ const DonateModal = ({ user, requestId, onClose }) => {
           </button>
         </div>
       </div>
+      <ToastContainer hideProgressBar></ToastContainer>
     </div>
   );
 };

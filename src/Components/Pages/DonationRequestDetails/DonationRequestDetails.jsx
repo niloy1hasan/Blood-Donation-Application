@@ -1,19 +1,22 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MapPin, Calendar, Clock, Droplet } from "lucide-react";
 import DonateModal from "./DonateModal";
 import { AuthContext } from "../../../Context/AuthContext";
 import defaultPhoto from "../../../assets/profile-picture.png";
+import axios from "axios";
 
 const DonationRequestDetails = () => {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [request, setRequest] = useState(null);
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [found, setFound] = useState(true);
 
   useEffect(() => {
     fetch(`https://blood-donation-application-server-eight.vercel.app/donation-requests/${id}`)
@@ -22,6 +25,7 @@ const DonationRequestDetails = () => {
         setRequest(data);
         setFormData(data);
         setLoading(false);
+        if (!data._id) setFound(false);
       });
   }, [id]);
 
@@ -29,23 +33,81 @@ const DonationRequestDetails = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleUpdate = async () => {
-    await fetch(
-      `https://blood-donation-application-server-eight.vercel.app/donation-requests/${id}`,
+const handleUpdate = async () => {
+  const url = `https://blood-donation-application-server-eight.vercel.app/update-donation-requests/${id}`;
+  const requiredFields = [
+    "recipientName",
+    "district",
+    "upazila",
+    "hospital",
+    "address",
+    "bloodGroup",
+    "donationDate",
+    "donationTime",
+    "message",
+  ];
+
+  const emptyField = requiredFields.find(
+    (field) => !formData[field] || formData[field].trim() === ""
+  );
+
+  if (emptyField) {
+    alert("All fields are required. Please fill in all information.");
+    return;
+  }
+
+  try {
+    const res = await axios.patch( url,
       {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(formData),
+        recipientName: formData.recipientName.trim(),
+        district: formData.district.trim(),
+        upazila: formData.upazila.trim(),
+        hospital: formData.hospital.trim(),
+        address: formData.address.trim(),
+        bloodGroup: formData.bloodGroup.trim(),
+        donationDate: formData.donationDate,
+        donationTime: formData.donationTime,
+        message: formData.message.trim(),
       }
     );
-    setRequest(formData);
+
+    setRequest(res.data);
     setIsEdit(false);
-  };
+  } catch (error) {
+    console.error("Update failed", error);
+    alert("Failed to update donation request");
+  }
+};
+
+
+const handleDelete = async () => {
+  const url = `https://blood-donation-application-server-eight.vercel.app/donation-requests/${id}`;
+  try {
+    await axios.delete(url);
+    alert("Donation request deleted successfully");
+    navigate(-1)
+  } catch (error) {
+    console.error("Delete failed", error);
+    alert("Failed to delete donation request");
+  }
+};
+
 
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
         <span className="loading loading-spinner loading-lg text-red-600"></span>
+      </div>
+    );
+  }
+
+
+  if(!found) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <h2 className="text-2xl font-semibold text-gray-700">
+          Donation Request Not Found
+        </h2>
       </div>
     );
   }
@@ -241,7 +303,7 @@ const DonationRequestDetails = () => {
                 Edit
               </button>
               <button
-                onClick={() => setIsEdit(true)}
+                onClick={handleDelete}
                 className="px-5 flex-1 w-full py-2 font-medium rounded-lg bg-red-600 hover:bg-red-700 text-white"
               >
                 Delete
@@ -250,9 +312,9 @@ const DonationRequestDetails = () => {
             )
           )}
 
-          {(user?.role === "donor" || user?.role === "admin") &&
+          {user?.role === "donor" &&
             user?.email !== request.requesterEmail &&
-            user?.bloodGroup === request.bloodGroup && (
+            (
               <button
                 onClick={() => setShowModal(true)}
                 className="px-5 w-full py-2 rounded-lg bg-red-600 text-white"
