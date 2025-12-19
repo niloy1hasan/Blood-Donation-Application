@@ -32,6 +32,7 @@ const SearchDonor = () => {
     const [districtName, setDistrictName] = useState([]);
     const [upazilaName, setUpazilaName] = useState([]);
     const [donors, setDonors] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
 
 
       useEffect(() => {
@@ -55,6 +56,7 @@ const SearchDonor = () => {
       }, [district]);
 
       const handleSearch = async () => {
+        setIsSearching(true);
   try {
     const url = `https://blood-donation-application-server-eight.vercel.app/search-donors?bloodGroup=${bloodGroup}&district=${district}&upazila=${upazila}`;
     const res = await axios.get(url);
@@ -62,6 +64,8 @@ const SearchDonor = () => {
     console.log(res.data);
   } catch (error) {
     console.error("Error fetching donors:", error);
+  } finally {
+    setIsSearching(false);
   }
 };
 
@@ -138,7 +142,7 @@ const SearchDonor = () => {
         <div className="mt-8 flex justify-center">
           <button onClick={handleSearch} className="flex items-center gap-2 rounded-full px-10 py-2.5 text-[16px] font-medium text-white bg-red-600 hover:bg-red-700 shadow-lg transition-all">
             <CiSearch className="w-5 h-5" />
-            Search Donor
+            {isSearching ? "Searching..." : "Search Donor"}
           </button>
         </div>
       </div>
