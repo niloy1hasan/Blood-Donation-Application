@@ -314,6 +314,7 @@ const handleDelete = async () => {
 
           {user?.role === "donor" &&
             user?.email !== request.requesterEmail &&
+            request.status === "pending" &&
             (
               <button
                 onClick={() => setShowModal(true)}
@@ -322,6 +323,14 @@ const handleDelete = async () => {
                 Donate Blood
               </button>
             )}
+
+            {
+              request.status === 'inprogress' && (
+                <span className="px-4 py-1 text-sm rounded-full border border-green-900 bg-green-100 text-green-800 font-semibold">
+                 In Progress
+                </span>
+              )
+            }
         </div>
       </div>
 
