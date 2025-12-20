@@ -1,6 +1,5 @@
-import React, { use, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
-import { AuthContext } from '../../../Context/AuthContext';
 import default_img from "../../../assets/profile-picture.png";
 import { CiUser } from 'react-icons/ci';
 import { IoIosGitPullRequest, IoIosLogOut } from 'react-icons/io';
@@ -8,9 +7,10 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import { TfiHelpAlt } from 'react-icons/tfi';
 import { RxDashboard } from "react-icons/rx";
 import { MdError } from 'react-icons/md';
+import useAuth from '../../../Hooks/useAuth';
 
 const Navbar = () => {
-    const { user, logoutUser, setUser } = use(AuthContext);
+    const { user, logoutUser, setUser } = useAuth();
     console.log(user);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const navigate = useNavigate();

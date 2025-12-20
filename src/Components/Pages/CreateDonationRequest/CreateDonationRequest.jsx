@@ -1,10 +1,10 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import { AuthContext } from "../../../Context/AuthContext";
+import useAuth from "../../../Hooks/useAuth";
 
 const CreateDonationRequest = () => {
-  const { user } = use(AuthContext);
+  const { user } = useAuth();
 
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);

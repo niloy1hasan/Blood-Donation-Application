@@ -1,11 +1,11 @@
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 import { TiUserAdd } from "react-icons/ti";
 import { NavLink, useNavigate } from "react-router";
 import default_img from "../../../assets/profile-picture.png";
-import { AuthContext } from "../../../Context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import useAuth from "../../../Hooks/useAuth";
 
 const loadDistricts = async () => {
   try {
@@ -30,7 +30,7 @@ const loadUpazilas = async () => {
 };
 
 const Register = () => {
-  const { setUser, createUser, googleSignIn, updateUserProfile, addUserOnDb, isUserExist } = use(AuthContext);
+  const { setUser, createUser, googleSignIn, updateUserProfile, addUserOnDb, isUserExist } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [email, setEmail] = useState("");

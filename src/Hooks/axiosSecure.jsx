@@ -1,14 +1,14 @@
 import axios from 'axios';
-import React, { use, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { AuthContext } from '../Context/AuthContext';
+import useAuth from './useAuth';
 
 const axiosSecure = axios.create({
     baseURL: 'https://blood-donation-application-server-eight.vercel.app'
 })
 
 const useAxiosSecure = () => {
-    const { user, loginUser } = use(AuthContext);
+    const { user, loginUser } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {

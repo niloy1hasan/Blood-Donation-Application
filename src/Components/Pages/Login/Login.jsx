@@ -1,12 +1,12 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { IoEnter } from "react-icons/io5";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 import { NavLink, useNavigate } from "react-router";
-import { AuthContext } from "../../../Context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
+import useAuth from "../../../Hooks/useAuth";
 
 const Login = () => {
-  const { loginUser, googleSignIn, addUserOnDb, isUserExist } = use(AuthContext);
+  const { loginUser, googleSignIn, addUserOnDb, isUserExist } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");

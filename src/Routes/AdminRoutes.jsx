@@ -1,10 +1,10 @@
-import React, { use } from 'react';
-import { AuthContext } from '../Context/AuthContext';
+import React from 'react';
 import Forbidden from '../Components/Forbidden/Forbidden';
 import useRole from '../Hooks/useRole';
+import useAuth from '../Hooks/useAuth';
 
 const AdminRoutes = ({children}) => {
-    const { user, loading } = use(AuthContext);
+    const { user, loading } = useAuth();
     const { role, roleLoading } = useRole();
 
     if (loading || roleLoading) {

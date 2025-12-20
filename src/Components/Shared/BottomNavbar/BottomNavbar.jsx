@@ -1,9 +1,9 @@
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 import { FiHome, FiUsers, FiSettings, FiUser, FiMenu, FiGitPullRequest } from "react-icons/fi";
-import { AuthContext } from '../../../Context/AuthContext';
 import { NavLink, useLocation } from 'react-router';
+import useAuth from '../../../Hooks/useAuth';
 const BottomNavbar = () => {
-        const { user } = use(AuthContext);
+        const { user } = useAuth();
         const [drawerOpen, setDrawerOpen ] = useState(false);
         const location = useLocation();
     

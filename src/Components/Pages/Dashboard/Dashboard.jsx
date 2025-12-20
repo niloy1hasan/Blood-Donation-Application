@@ -1,8 +1,8 @@
-import React, { use } from 'react';
-import { AuthContext } from '../../../Context/AuthContext';
+import React from 'react';
+import useAuth from '../../../Hooks/useAuth';
 
 const Dashboard = () => {
-    const { user } = use(AuthContext);
+    const { user } = useAuth();
 
     return (
         <div className='p-6 h-screen'>

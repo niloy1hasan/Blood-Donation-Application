@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MapPin, Calendar, Clock, Droplet } from "lucide-react";
 import DonateModal from "./DonateModal";
-import { AuthContext } from "../../../Context/AuthContext";
 import defaultPhoto from "../../../assets/profile-picture.png";
 import axios from "axios";
+import useAuth from "../../../Hooks/useAuth";
 
 const DonationRequestDetails = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -326,8 +326,24 @@ const handleDelete = async () => {
 
             {
               request.status === 'inprogress' && (
-                <span className="px-4 py-1 text-sm rounded-full border border-green-900 bg-green-100 text-green-800 font-semibold">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="px-4 py-1 text-sm rounded-full border border-green-900 bg-green-100 text-green-800 font-semibold">
                  In Progress
+                </span>
+                { request.donorName===user?.displayName && (<button
+                onClick={() => setShowModal(true)}
+                className="px-5 w-full py-2 rounded-lg bg-red-600 text-white"
+              >
+                Cancel
+              </button>)}
+              </div>
+              )
+            }
+
+            {
+              request.status === 'done' && (
+                <span className="px-4 ml-3 py-1 text-sm rounded-full border border-blue-900 bg-blue-100 text-blue-800 font-semibold">
+                 Completed
                 </span>
               )
             }
