@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { NavLink, useLocation, useNavigate } from 'react-router';
 import default_img from "../../../assets/profile-picture.png";
 import { CiUser } from 'react-icons/ci';
 import { IoIosGitPullRequest, IoIosLogOut } from 'react-icons/io';
@@ -14,45 +14,48 @@ const Navbar = () => {
     console.log(user);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+  const navStyle = (path) => {return `hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold ${location.pathname === path ? 'bg-gray-100 text-red' : 'text-gray-900'}`};
 
   const navMenu = <>
-    <NavLink to={'/'} className={`text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold`}>
+    <NavLink to={'/'} className={navStyle('/')}>
                   Home
                 </NavLink>
 
-                <NavLink to={'/search-donor'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
+                <NavLink to={'/search-donor'} className={navStyle('/search-donor')}>
                   Search Donor
                 </NavLink>
-                <NavLink to={'/all-donation-request'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
+                <NavLink to={'/all-donation-request'} className={navStyle('/all-donation-request')}>
                   Donation Requests
                 </NavLink>
-                {user && <NavLink to={'/funding'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
+                {user && <NavLink to={'/funding'} className={navStyle('/funding')}>
                   Funding
                 </NavLink>}
-                <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
+                <a className={navStyle('/about')}>
                   About
                 </a>
-                <a className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
+                <a className={navStyle('/contact')}>
                   Contact
                 </a>
         </>;
 
-    
+const mobileNavStyle = (path) => {return `text-gray-900 block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100 ${location.pathname === path && 'bg-gray-100'}`};
 const mobileNavMenu = <>
-    <NavLink to={'/'} className="bg-gray-100 text-gray-900 block px-3 py-2 rounded-md text-base font-medium" href="#">
+    <NavLink to={'/'} className={mobileNavStyle('/')}>
             Home
           </NavLink>
 
-          <NavLink to={'/search-donor'} className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">
+          <NavLink to={'/search-donor'} className={mobileNavStyle('/search-donor')}>
             Search Donor
           </NavLink>
-          <NavLink to={'/dashboard/all-blood-donation-request'} className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">
+          <NavLink to={'/all-donation-request'} className={mobileNavStyle('/all-donation-request')}>
             Donation Requests
           </NavLink>
-          <a className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium" href="#">
+          <a className={mobileNavStyle('/about')}>
             About
           </a>
-          <a className="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium" href="#">
+          <a className={mobileNavStyle('/contact')}>
             Contact
           </a>
     </>;
@@ -98,7 +101,7 @@ const logoutModal = useRef();
           {/* Right side */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             { !user && <div className="flex sm:items-center">
-              <NavLink to={'/login'} className="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-semibold">
+              <NavLink to={'/login'} className={navStyle('/login')}>
                 Login
               </NavLink>
               <NavLink to={'/register'} className="ml-4 bg-linear-to-r from-red-600 to-red-800 text-white px-4 py-2 rounded-md text-sm font-bold hover:from-red-700 hover:to-red-900">
@@ -121,9 +124,9 @@ const logoutModal = useRef();
             {
               user && <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-        <div className="w-10 rounded-full">
+        <div className="w-10 h-10 rounded-full">
           <img
-            alt={user.displayName}
+            alt={user.displayName} className='w-10 h-10 object-cover'
             src={user.photoURL || default_img} />
         </div>
       </div>
@@ -175,7 +178,7 @@ const logoutModal = useRef();
             </div> : <div className="flex bg-gray-100 px-3 py-2 rounded-xl items-center gap-3">
              <div className="w-9 h-9">
             <img
-            className="rounded-full h-9 w-9"
+            className="rounded-full h-9 w-9 object-cover"
               src={user.photoURL ? user.photoURL : default_img} />
         </div> 
 
