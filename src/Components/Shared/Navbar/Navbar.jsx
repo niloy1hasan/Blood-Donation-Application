@@ -52,6 +52,9 @@ const mobileNavMenu = <>
           <NavLink to={'/all-donation-request'} className={mobileNavStyle('/all-donation-request')}>
             Donation Requests
           </NavLink>
+          {user && <NavLink to={'/funding'} className={mobileNavStyle('/funding')}>
+                  Funding
+                </NavLink>}
           <a className={mobileNavStyle('/about')}>
             About
           </a>

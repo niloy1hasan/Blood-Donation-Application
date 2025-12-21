@@ -6,15 +6,24 @@ const AllDonationRequest = () => {
   const axiosInstance = useAxios();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 6;
+  const [totalCount, setTotalCount] = useState(0);
+  const totalPages = Math.ceil(totalCount / limit);
+
+
 
   useEffect(() => {
-    axiosInstance.get('/donation-requests-pending')
+    const skip = (currentPage - 1) * limit;
+
+    axiosInstance.get(`/donation-requests-pending?limit=${limit}&skip=${skip}`)
       .then(res => {
-        setRequests(res.data);
+        setRequests(res.data.requests);
+        setTotalCount(res.data.totalCount);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [currentPage, axiosInstance]);
 
   if (loading) {
     return (
@@ -35,11 +44,30 @@ const AllDonationRequest = () => {
           No pending donation requests found.
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {requests.map(request => (
-            <DonationRequestCard key={request._id} request={request} />
-          ))}
-        </div>
+         <>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {requests.map((request) => (
+              <DonationRequestCard key={request._id} request={request} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-center mt-10">
+            <div className="join">
+              {[...Array(totalPages).keys()].map((page) => (
+                <button
+                  key={page}
+                  className={`join-item btn btn-square ${
+                    currentPage === page + 1 ? "btn-active" : ""
+                  }`}
+                  onClick={() => setCurrentPage(page + 1)}
+                >
+                  {page + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
       )}
     </section>
   );

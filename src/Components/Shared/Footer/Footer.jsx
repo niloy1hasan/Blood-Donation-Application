@@ -2,6 +2,7 @@ import React from "react";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
+import { NavLink } from "react-router";
 
 
 const Footer = () => {
@@ -191,12 +192,12 @@ const Footer = () => {
               <li className="hover:underline">Supports</li>
             </ul>
           </div>
-          <a
-              href="#"
+          <NavLink
+              to={'/funding'}
               className="flex gap-2 justify-center items-center px-6 py-2 bg-red-600 font-bold text-white rounded-full text-sm shadow hover:bg-red-700 transition"
             >
               <FaRegHeart size={16} /> Donate Now
-            </a>
+            </NavLink>
         </div>
       </div>
     </footer>

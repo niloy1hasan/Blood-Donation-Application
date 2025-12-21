@@ -90,7 +90,7 @@ const MyDonationTable = ({setVisible=false}) => {
           <td className="px-6 py-4 whitespace-nowrap">{donation.recipientName}</td>
 
           {/* Location */}
-          <td className="px-6 py-4 whitespace-nowrap">{donation.hospital}, {donation.address}</td>
+          <td className="px-6 py-4 whitespace-nowrap">{donation.upazila}, {donation.district}</td>
 
           {/* Date */}
           <td className="px-6 py-4 whitespace-nowrap">{donation.donationDate}</td>

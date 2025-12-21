@@ -9,13 +9,23 @@ const MyDonationRequest = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 6;
+  const [totalCount, setTotalCount] = useState(0);
+
+  const totalPages = Math.ceil(totalCount / limit);
+
   useEffect(() => {
     if (!user?.email) return;
 
     const fetchMyRequests = async () => {
+      setLoading(true);
+      const skip = (currentPage - 1) * limit;
+
       try {
-        const res = await axiosSecure.get(`/my-donation-requests?email=${user.email}`);
-        setRequests(res.data);
+        const res = await axiosSecure.get(`/my-donation-requests?email=${user.email}&limit=${limit}&skip=${skip}`);
+        setRequests(res.data.requests || []);
+        setTotalCount(res.data.totalCount || 0);
       } catch (error) {
         console.error("Failed to load donation requests", error);
       } finally {
@@ -24,7 +34,7 @@ const MyDonationRequest = () => {
     };
 
     fetchMyRequests();
-  }, [user?.email]);
+  }, [user?.email, currentPage, axiosSecure]);
 
   if (loading) {
     return (
@@ -45,6 +55,7 @@ const MyDonationRequest = () => {
           You haven’t created any donation requests yet.
         </div>
       ) : (
+        <>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {requests.map((request) => (
             <DonationRequestCard
@@ -53,6 +64,25 @@ const MyDonationRequest = () => {
             />
           ))}
         </div>
+        {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-10">
+              <div className="join">
+                {[...Array(totalPages).keys()].map((page) => (
+                  <button
+                    key={page}
+                    className={`join-item btn btn-square ${
+                      currentPage === page + 1 ? "btn-active" : ""
+                    }`}
+                    onClick={() => setCurrentPage(page + 1)}
+                  >
+                    {page + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </section>
   );
