@@ -1,9 +1,12 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { AuthContext } from '../../../Context/AuthContext';
 import axios from 'axios';
 import ProfileSkeleton from './ProfileSkeleton';
 import { toast, ToastContainer } from 'react-toastify';
 import default_img from '../../../assets/profile-picture.png';
+import useAxios from '../../../Hooks/useAxios';
+import useAuth from '../../../Hooks/useAuth';
+import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 
 const loadDistricts = async () => {
   try {
@@ -28,7 +31,9 @@ const loadUpazilas = async () => {
 };
 
 const Profile = () => {
-  const { user, updateUserProfile } = useContext(AuthContext);
+  const { user, updateUserProfile } = useAuth();
+  const axiosInstance = useAxios();
+  const axiosSecure = useAxiosSecure();
 
   const [loading, setLoading] = useState(true);
   const [isSubmit, setIsSubmit] = useState(false);
@@ -56,9 +61,9 @@ const Profile = () => {
     if (!user?.email) return;
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`https://blood-donation-application-server-eight.vercel.app/users/${user.email}`);
-        console.log(res);
+        const res = await axiosInstance.get(`/users/${user.email}`);
         const u = res.data;
+        console.log("from profile", res);
         setFormData({
           photoURL: u.photoURL || user.photoURL || default_img,
           displayName: u.displayName || '',
@@ -125,7 +130,7 @@ const handleFileChange = (e) => {
   try {
     const uploadedURL = await uploadImage();
 
-    const url = `https://blood-donation-application-server-eight.vercel.app/user/update/${user.email}`;
+    const url = `/user/update/${user.email}`;
     const payload = {
       photoURL: uploadedURL,
       displayName: formData.displayName?.trim() || user.displayName,
@@ -135,7 +140,7 @@ const handleFileChange = (e) => {
       upazila: formData.upazila || user.upazila,
     };
 
-    const res = await axios.patch(url, payload);
+    const res = await axiosSecure.patch(url, payload);
     await updateUserProfile(payload.displayName, payload.photoURL);
     toast.success("Profile updated successfully!");
 

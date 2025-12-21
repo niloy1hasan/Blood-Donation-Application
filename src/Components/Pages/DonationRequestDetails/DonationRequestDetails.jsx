@@ -3,13 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { MapPin, Calendar, Clock, Droplet } from "lucide-react";
 import DonateModal from "./DonateModal";
 import defaultPhoto from "../../../assets/profile-picture.png";
-import axios from "axios";
 import useAuth from "../../../Hooks/useAuth";
-
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { toast, ToastContainer } from "react-toastify";
+//done 
 const DonationRequestDetails = () => {
   const { user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
+
 
   const [request, setRequest] = useState(null);
   const [formData, setFormData] = useState({});
@@ -19,13 +22,14 @@ const DonationRequestDetails = () => {
   const [found, setFound] = useState(true);
 
   useEffect(() => {
-    fetch(`https://blood-donation-application-server-eight.vercel.app/donation-requests/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        setRequest(data);
-        setFormData(data);
+    axiosSecure.get(`/donation-requests/${id}`)
+      .then(res => {
+        console.log(res);
+        setRequest(res.data);
+        setFormData(res.data);
         setLoading(false);
-        if (!data._id) setFound(false);
+    console.log('from detail', res);
+        if (!res.data._id) setFound(false);
       });
   }, [id]);
 
@@ -34,7 +38,7 @@ const DonationRequestDetails = () => {
   };
 
 const handleUpdate = async () => {
-  const url = `https://blood-donation-application-server-eight.vercel.app/update-donation-requests/${id}`;
+  const url = `/update-donation-requests/${id}`;
   const requiredFields = [
     "recipientName",
     "district",
@@ -52,12 +56,12 @@ const handleUpdate = async () => {
   );
 
   if (emptyField) {
-    alert("All fields are required. Please fill in all information.");
+    toast.error("All fields are required. Please fill in all information.");
     return;
   }
 
   try {
-    const res = await axios.patch( url,
+    const res = await axiosSecure.patch( url,
       {
         recipientName: formData.recipientName.trim(),
         district: formData.district.trim(),
@@ -70,25 +74,25 @@ const handleUpdate = async () => {
         message: formData.message.trim(),
       }
     );
-
     setRequest(res.data);
     setIsEdit(false);
+    toast.success('update successfully');
   } catch (error) {
     console.error("Update failed", error);
-    alert("Failed to update donation request");
+    toast.error("Failed to update donation request");
   }
 };
 
 
 const handleDelete = async () => {
-  const url = `https://blood-donation-application-server-eight.vercel.app/donation-requests/${id}`;
+  const url = `/donation-requests/${id}`;
   try {
-    await axios.delete(url);
-    alert("Donation request deleted successfully");
+    await axiosSecure.delete(url);
+    toast.success("Donation request deleted successfully");
     navigate(-1)
   } catch (error) {
     console.error("Delete failed", error);
-    alert("Failed to delete donation request");
+    toast.error("Failed to delete donation request");
   }
 };
 
@@ -357,6 +361,8 @@ const handleDelete = async () => {
           onClose={() => setShowModal(false)}
         />
       )}
+
+      <ToastContainer hideProgressBar></ToastContainer>
     </section>
   );
 };

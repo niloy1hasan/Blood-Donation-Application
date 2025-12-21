@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { auth } from '../Firebase/firebase.config';
 import { AuthContext } from './AuthContext';
-import axios from 'axios';
+import useAxios from '../Hooks/useAxios';
 
 const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({children}) => {
+    const axiosInstance = useAxios();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -33,11 +34,11 @@ const AuthProvider = ({children}) => {
         return updateProfile(auth.currentUser, profile);
     }
 
-    const addUserOnDb = (newUser) => {
-    const url = 'https://blood-donation-application-server-eight.vercel.app/users';
+    const addUserOnDb = async(newUser) => {
+    const url = '/users';
 
     try {
-        const res = axios.post(url, newUser);
+        const res = await axiosInstance.post(url, newUser);
         console.log(res.data);
         return res.data;
     } catch (error) {
@@ -48,13 +49,19 @@ const AuthProvider = ({children}) => {
 
 
         const isUserExist = (email) => {
-            const url = `https://blood-donation-application-server-eight.vercel.app/users/${encodeURIComponent(email)}`;
-            return axios.get(url);
+            const url = `/users/${email}`;
+            return axiosInstance.get(url);
         }
 
         const getDBUser = async(email) => {
+              const token = await auth.currentUser.getIdToken();
+              console.log(token);
             try {
-                const res = await axios.get(`https://blood-donation-application-server-eight.vercel.app/users/${email}`);
+                const res = await axiosInstance.get(`/users/${email}`, {
+                    headers: {
+                        authorization : `Bearer ${token}`
+                    }
+                });
                 return res.data;
             } catch (error) {
                 console.error(error);

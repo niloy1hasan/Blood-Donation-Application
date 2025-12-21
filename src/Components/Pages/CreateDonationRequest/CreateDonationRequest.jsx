@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import useAuth from "../../../Hooks/useAuth";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const CreateDonationRequest = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
@@ -30,7 +31,9 @@ const CreateDonationRequest = () => {
   }, []);
 
   useEffect(() => {
-    if (!formData.district) return setUpazilas([]);
+    if (!formData.district){
+      return;
+    };
     fetch("/upazilas.json")
       .then(res => res.json())
       .then(data => {
@@ -40,7 +43,14 @@ const CreateDonationRequest = () => {
   }, [formData.district, districts]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => {
+      const updated = { ...prev, [name]: value };
+      if (name === "district" && !value) {
+        setUpazilas([]);
+      }
+      return updated;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -52,13 +62,10 @@ const CreateDonationRequest = () => {
     }
 
     try {
-      await axios.post(
-        "https://blood-donation-application-server-eight.vercel.app/donation-requests",
-        formData
-      );
+      await axiosSecure.post("/donation-requests", formData);
       toast.success("Donation request created successfully!");
-    } catch (error) {
-      toast.error("Failed to create donation request");
+    } catch (e) {
+      toast.error("Failed to create donation request", e);
     }
   };
 

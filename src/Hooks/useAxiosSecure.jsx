@@ -1,48 +1,60 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import useAuth from './useAuth';
 
+// axios instance
 const instance = axios.create({
-    baseURL: 'https://blood-donation-application-server-eight.vercel.app'
-})
+  // baseURL: 'https://blood-donation-application-server-eight.vercel.app',
+  baseURL: 'http://localhost:3000',
+});
 
 const useAxiosSecure = () => {
-    const { user, logoutUser } = useAuth();
-    const navigate = useNavigate();
+  const { user, logoutUser, loading } = useAuth();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!user) return;
+    if (loading) return;
 
-    useEffect(()=>{
+    const reqInterceptor = instance.interceptors.request.use(
+      async (config) => {
+        try {
+          const token = await user.accessToken;
 
-        // request interceptor
-        const reqInterceptor = instance.interceptors.request.use((config) => {
-        console.log(config);
-        config.headers.authorization = `Bearer ${user?.accessToken}`
+          if (token) {
+            config.headers.authorization = `Bearer ${token}`;
+          }
+        } catch (err) {
+          console.error('Token error:', err);
+        }
+
         return config;
-        });
-        // response interceptor
-        const resInterceptor = instance.interceptors.response.use((response) => {
-         return response;
-        }, (error) => {
-            console.log(error);
-            const statusCode = error.status;
-            if (statusCode === 401 || statusCode === 403) {
-                logoutUser()
-                    .then(() => {
-                        navigate('/login')
-                    })
-            }
-        });
+      },
+      (error) => Promise.reject(error)
+    );
 
+    // const resInterceptor = instance.interceptors.response.use(
+    //   (response) => response,
+    //   (error) => {
+    //     const statusCode = error.response?.status;
+
+    //     if (statusCode === 401 || statusCode === 403) {
+    //       logoutUser().then(() => {
+    //         navigate('/login');
+    //       });
+    //     }
+
+    //     return Promise.reject(error);
+    //   }
+    // );
     return () => {
-        instance.interceptors.request.eject(reqInterceptor);
-        instance.interceptors.response.eject(resInterceptor);
-    }
+      instance.interceptors.request.eject(reqInterceptor);
+      // instance.interceptors.response.eject(resInterceptor);
+    };
+  }, [user, logoutUser, navigate, loading]);
 
-    }, [user, logoutUser, navigate]);
-
-
-    return instance;
+  return instance;
 };
 
 export default useAxiosSecure;

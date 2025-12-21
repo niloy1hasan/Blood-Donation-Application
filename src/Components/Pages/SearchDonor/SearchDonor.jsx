@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import DonorCard from "./DonorCard";
 import axios from "axios";
+import useAxios from "../../../Hooks/useAxios";
 
 const loadDistricts = async () => {
   try {
@@ -26,6 +27,7 @@ const loadUpazilas = async () => {
 };
 
 const SearchDonor = () => {
+  const axiosInstance = useAxios();
     const [bloodGroup, setBloodGroup] = useState("");
     const [district, setDistrict] = useState("");
     const [upazila, setUpazila] = useState("");
@@ -58,8 +60,8 @@ const SearchDonor = () => {
       const handleSearch = async () => {
         setIsSearching(true);
   try {
-    const url = `https://blood-donation-application-server-eight.vercel.app/search-donors?bloodGroup=${bloodGroup}&district=${district}&upazila=${upazila}`;
-    const res = await axios.get(url);
+    const url = `/search-donors?bloodGroup=${bloodGroup}&district=${district}&upazila=${upazila}`;
+    const res = await axiosInstance.get(url);
     setDonors(res.data);
     console.log(res.data);
   } catch (error) {

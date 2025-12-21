@@ -17,7 +17,7 @@ const UserFilterDropdown = ({ onSelect }) => {
       {/* Dropdown button */}
       <button
         type="button"
-        className="flex w-full text-sm justify-between items-center bg-white px-4 py-2 text-black font-medium shadow-md rounded-md"
+        className="flex w-full text-sm justify-between items-center bg-white/50 px-4 py-2 text-black font-medium border border-gray-400 rounded-md"
         onClick={() => setIsOpen(!isOpen)}
       >
         {selected}
@@ -46,7 +46,7 @@ const UserFilterDropdown = ({ onSelect }) => {
             <button
               key={option}
               onClick={() => handleSelect(option)}
-              className={`block text-sm w-full text-left px-4 py-2 font-semibold text-gray-700 hover:bg-gray-200 hover:text-black ${
+              className={`block text-sm w-full text-left px-4 py-2 font-medium text-gray-700 hover:bg-gray-200 hover:text-black ${
                 selected === option ? "bg-gray-200" : ""
               }`}
             >

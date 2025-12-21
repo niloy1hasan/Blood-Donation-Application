@@ -18,6 +18,8 @@ import Funding from '../Components/Pages/Funding/Funding';
 import AllDonationRequest from '../Components/Pages/AllDonationRequest/AllDonationRequest';
 import DonationRequestDetails from '../Components/Pages/DonationRequestDetails/DonationRequestDetails';
 import MyDonationRequest from '../Components/Pages/MyDonationRequest/MyDonationRequest';
+import DonationSuccess from '../Components/Pages/Funding/DonationSuccess';
+import DonationCancel from '../Components/Pages/Funding/DonationCancel';
 
 const router = createBrowserRouter([
   {
@@ -55,6 +57,14 @@ const router = createBrowserRouter([
         element: <PrivateRoutes>
           <Funding></Funding>
         </PrivateRoutes>
+      },
+      {
+        path: 'funding/donation-success',
+        Component: DonationSuccess
+      },
+      {
+        path: 'funding/donation-cancel',
+        Component: DonationCancel
       },
        {
         path: '/dashboard',

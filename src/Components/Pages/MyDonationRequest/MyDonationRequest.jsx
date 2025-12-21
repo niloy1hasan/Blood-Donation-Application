@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../Context/AuthContext";
 import DonationRequestCard from "../../DonationRequestCard/DonationRequestCard";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const MyDonationRequest = () => {
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,11 +14,8 @@ const MyDonationRequest = () => {
 
     const fetchMyRequests = async () => {
       try {
-        const res = await fetch(
-          `https://blood-donation-application-server-eight.vercel.app/my-donation-requests?email=${user.email}`
-        );
-        const data = await res.json();
-        setRequests(data);
+        const res = await axiosSecure.get(`/my-donation-requests?email=${user.email}`);
+        setRequests(res.data);
       } catch (error) {
         console.error("Failed to load donation requests", error);
       } finally {

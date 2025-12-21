@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import UserCard from './UserCard/UserCard';
 import { IoMdPersonAdd } from "react-icons/io";
 import UserTableSkeleton from './UserTableSkeleton';
@@ -8,6 +7,7 @@ import { RiUserForbidLine, RiUserAddLine, RiAdminLine, RiCloseLine, RiUserMinusL
 import ActionModal from './UserCard/ActionModal';
 import default_img from '../../../assets/profile-picture.png';
 import UserFilterDropdown from './UserCard/UserFilterDropdown';
+import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 
 const statusColors = {
   active: "text-green-800",
@@ -15,6 +15,8 @@ const statusColors = {
 };
 
 const AllUsers = () => {
+    const axiosSecure = useAxiosSecure();
+    
     const [loadedUsers, setLoadedUsers] = useState([]);
     const [allUser, setAllUser] = useState(loadedUsers);
     const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ const AllUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("https://blood-donation-application-server-eight.vercel.app/users");
+        const res = await axiosSecure.get("/users");
         setLoadedUsers(res.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -70,9 +72,9 @@ const AllUsers = () => {
   };
 
   const handleBlockUser = async (email) => {
-    const url = "https://blood-donation-application-server-eight.vercel.app/user/block";
+    const url = "/user/block";
     try {
-      const res = await axios.patch( url, { email });
+      const res = await axiosSecure.patch( url, { email });
       console.log("User status updated:", );
       updateUserState(email, { status: res.data?.status });
     } catch (error) {
@@ -82,8 +84,8 @@ const AllUsers = () => {
 
 
   const handleAdmin = (email) => {
-    const url = 'https://blood-donation-application-server-eight.vercel.app/user/admin';
-    axios.patch(url, { email })
+    const url = '/user/admin';
+    axiosSecure.patch(url, { email })
       .then(res => {
         console.log('User promoted to admin:', res.data);
       updateUserState(email, { role: res.data?.role });
@@ -94,8 +96,8 @@ const AllUsers = () => {
   }
 
   const handleVolunteer = (email) => {
-    const url = 'https://blood-donation-application-server-eight.vercel.app/user/volunteer';
-    axios.patch(url, { email })
+    const url = '/user/volunteer';
+    axiosSecure.patch(url, { email })
       .then(res => {
         console.log('User added as volunteer:', res.data);
         updateUserState(email, { role: res.data?.role });

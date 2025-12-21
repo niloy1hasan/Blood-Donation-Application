@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import DonationRequestCard from "../../DonationRequestCard/DonationRequestCard";
-
+import useAxios from "../../../Hooks/useAxios";
+//done
 const AllDonationRequest = () => {
+  const axiosInstance = useAxios();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://blood-donation-application-server-eight.vercel.app/donation-requests-pending")
-      .then(res => res.json())
-      .then(data => {
-        setRequests(data);
+    axiosInstance.get('/donation-requests-pending')
+      .then(res => {
+        setRequests(res.data);
         setLoading(false);
       })
       .catch(() => setLoading(false));

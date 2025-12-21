@@ -1,12 +1,13 @@
-import axios from "axios";
 import React from "react";
 import { toast, ToastContainer } from "react-toastify";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const DonateModal = ({ user, requestId, onClose }) => {
+    const axiosSecure = useAxiosSecure();
 const handleConfirm = async () => {
-  const url = `https://blood-donation-application-server-eight.vercel.app/donation-requests/update-status/${requestId}`;
+  const url = `/donation-requests/update-status/${requestId}`;
   try {
-    const res = await axios.patch(url, { status: "inprogress" });
+    const res = await axiosSecure.patch(url, { status: "inprogress" });
 
     if (res.data.success) {
       toast.success("Donation confirmed successfully!");

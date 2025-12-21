@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import DonationRequestCard from "../../DonationRequestCard/DonationRequestCard"
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const DonationRequest = () => {
+  const axiosSecure = useAxiosSecure();
+
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -9,16 +12,12 @@ const DonationRequest = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const res = await fetch(
-          "https://blood-donation-application-server-eight.vercel.app/donation-requests"
-        );
-
-        if (!res.ok) {
+        const res = await axiosSecure.get("/donation-requests");
+        console.log("from donation request:", res);
+        if (res.status!==200) {
           throw new Error("Failed to fetch donation requests");
         }
-
-        const data = await res.json();
-        setRequests(data);
+        setRequests(res.data);
       } catch (err) {
         setError(err.message);
       } finally {
