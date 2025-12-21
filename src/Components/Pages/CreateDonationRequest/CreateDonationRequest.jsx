@@ -66,6 +66,21 @@ const CreateDonationRequest = () => {
       toast.success("Donation request created successfully!");
     } catch (e) {
       toast.error("Failed to create donation request", e);
+    } finally{
+      setFormData({
+    requesterName: user?.displayName || "",
+    requesterEmail: user?.email || "",
+    recipientName: "",
+    district: "",
+    upazila: "",
+    hospital: "",
+    address: "",
+    bloodGroup: "",
+    donationDate: "",
+    donationTime: "",
+    message: "",
+    status: "pending",
+  });
     }
   };
 

@@ -12,7 +12,7 @@ const BottomNavbar = () => {
                     { icon: <FiUsers />, label: "Users", path: "/dashboard/all-users", role: ['admin'] },
                     { icon: <FiGitPullRequest />, label: "My Requests", path: '/dashboard/my-donation-requests', role: ['donor', 'volunteer'] },
                     { icon: <FiGitPullRequest />, label: "Requests", path: '/dashboard/all-blood-donation-request', role: ['admin', 'volunteer'] },
-                    { icon: <FiGitPullRequest />, label: "Create Request", path: "/dashboard/create-donation-request", role: ['admin', 'donor', 'volunteer'] },
+                    { icon: <FiGitPullRequest />, label: "Create Request", path: "/dashboard/create-donation-request", role: ['donor', 'volunteer'] },
                     { icon: <FiUser />, label: "Profile", path: "/dashboard/profile", role: ['admin', 'donor', 'volunteer'] },
                     { icon: <FiSettings />, label: "Settings", role: ['admin', 'donor', 'volunteer'] },
                   ];

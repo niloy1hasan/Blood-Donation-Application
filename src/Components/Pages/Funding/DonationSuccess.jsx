@@ -7,7 +7,6 @@ const DonationSuccess = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const sessionId = searchParams.get('session_id');
     console.log(sessionId);
-    // const [countdown, setCountdown] = useState(100);
     const redirectUrl = "/funding";
 
     useEffect(() => {
@@ -29,22 +28,6 @@ const DonationSuccess = () => {
 
         confirmDonation();
         }, [sessionId]);
-
-
-//   useEffect(() => {
-//     const timerId = setInterval(() => {
-//       setCountdown((prev) => {
-//         if (prev <= 1) {
-//           clearInterval(timerId);
-//           window.location.href = redirectUrl;
-//           return 0;
-//         }
-//         return prev - 1;
-//       });
-//     }, 1000);
-
-//     return () => clearInterval(timerId);
-//   }, []);
 
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen p-5">
@@ -75,15 +58,6 @@ const DonationSuccess = () => {
         <p className="text-gray-600 text-lg mb-6">
           Thank you for your incredible support! Your donation is making a difference and is currently being processed. A confirmation email will be sent shortly.
         </p>
-
-        {/* Countdown Box */}
-        <div className="bg-gray-50 p-4 rounded-md mb-8">
-          <p className="text-gray-800">
-            You will be redirected to your funding page in{" "}
-            {/* <span className="font-bold text-red-600">{countdown}</span>{" "} */}
-            seconds.
-          </p>
-        </div>
 
         <a
           href={redirectUrl}

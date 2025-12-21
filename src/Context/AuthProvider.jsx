@@ -70,19 +70,25 @@ const AuthProvider = ({children}) => {
         }
 
 
-    useEffect(()=>{
-        const unsubscribe = onAuthStateChanged(auth, (currentUser)=>{
-            setUser(currentUser);
-            getDBUser(currentUser.email).then((dbUser) => {
-                setUser(prevUser => ({ ...prevUser, ...dbUser }));
-            });
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            if (currentUser) {
+            try {
+                const dbUser = await getDBUser(currentUser.email);
+                setUser({ ...currentUser, ...dbUser });
+            } catch (error) {
+                console.error(error);
+                setUser(currentUser);
+            }
+            } else {
+            setUser(null);
+            }
             setLoading(false);
-        })
+        });
 
-        return ()=>{
-            unsubscribe();
-        }
+        return () => unsubscribe();
     }, []);
+
 
     const authInfo = {
         user,

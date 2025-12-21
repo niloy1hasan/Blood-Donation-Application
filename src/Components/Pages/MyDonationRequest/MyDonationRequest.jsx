@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../Context/AuthContext";
+import React, { useEffect, useState } from "react";
 import DonationRequestCard from "../../DonationRequestCard/DonationRequestCard";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import useAuth from "../../../Hooks/useAuth";
 
 const MyDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
