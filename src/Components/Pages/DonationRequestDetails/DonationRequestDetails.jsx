@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MapPin, Calendar, Clock, Droplet } from "lucide-react";
 import DonateModal from "./DonateModal";
@@ -6,6 +6,7 @@ import defaultPhoto from "../../../assets/profile-picture.png";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { toast, ToastContainer } from "react-toastify";
+import DeleteModal from "../../Shared/Modal/DeleteModal";
 //done 
 const DonationRequestDetails = () => {
   const { user } = useAuth();
@@ -20,6 +21,8 @@ const DonationRequestDetails = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [found, setFound] = useState(true);
+
+  const deleteModal = useRef(null);
 
   useEffect(() => {
     axiosSecure.get(`/donation-requests/${id}`)
@@ -93,6 +96,8 @@ const handleDelete = async () => {
   } catch (error) {
     console.error("Delete failed", error);
     toast.error("Failed to delete donation request");
+  } finally {
+    deleteModal.current.close();
   }
 };
 
@@ -307,7 +312,7 @@ const handleDelete = async () => {
                 Edit
               </button>
               <button
-                onClick={handleDelete}
+                onClick={()=> deleteModal.current?.showModal()}
                 className="px-5 flex-1 w-full py-2 font-medium rounded-lg bg-red-600 hover:bg-red-700 text-white"
               >
                 Delete
@@ -362,6 +367,7 @@ const handleDelete = async () => {
         />
       )}
 
+      <DeleteModal deleteModal={deleteModal} handleDelete={handleDelete}></DeleteModal>
       <ToastContainer hideProgressBar></ToastContainer>
     </section>
   );

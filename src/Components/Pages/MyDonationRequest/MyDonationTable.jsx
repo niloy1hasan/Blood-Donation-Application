@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useEffect, useRef, useState } from 'react';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import useAuth from '../../../Hooks/useAuth';
 import { toast, ToastContainer } from 'react-toastify';
+import DeleteModal from '../../Shared/Modal/DeleteModal';
 
 const MyDonationTable = ({setVisible=false}) => {
-    const navigate = useNavigate();
-    const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState(null);
+  const deleteModal = useRef(null);
+  const limit = 3;
+  const skip = 0;
 
   useEffect(() => {
     if (!user?.email) return;
 
     const fetchMyRequests = async () => {
       try {
-        const res = await axiosSecure.get(`/my-donation-requests?email=${user.email}`);
-        setRequests((res.data).slice(0, 3));
-        if(res.data.length){
-            setVisible(true);
+        const res = await axiosSecure.get(`/my-donation-requests?email=${user.email}&limit=${limit}&skip=${skip}`);
+        setRequests(res.data.requests || []);
+        if(res.data?.requests?.length){
+        setVisible(true);
         }
       } catch (error) {
         console.error("Failed to load donation requests", error);
@@ -33,15 +36,18 @@ const MyDonationTable = ({setVisible=false}) => {
 
 
   // Function to delete donation
-  const handleDeleteDonation = async(id) => {
-    const url = `/donation-requests/${id}`;
+  const handleDelete = async() => {
+    const url = `/donation-requests/${selected}`;
       try {
         await axiosSecure.delete(url);
+        setRequests(requests.filter(item => item._id !== selected));
         toast.success("Donation request deleted successfully");
-        navigate(-1)
       } catch (error) {
         console.error("Delete failed", error);
         toast.error("Failed to delete donation request");
+      } finally {
+        deleteModal.current.close();
+        setSelected(null);
       }
   };
 
@@ -152,7 +158,7 @@ const MyDonationTable = ({setVisible=false}) => {
 
             {/* Delete Button */}
             <button
-              onClick={() => handleDeleteDonation(donation._id)}
+              onClick={() => {setSelected(donation._id); deleteModal?.current?.showModal();}}
               className="px-3 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
             >
               Delete
@@ -162,6 +168,7 @@ const MyDonationTable = ({setVisible=false}) => {
       ))}
     </tbody>
   </table>
+  <DeleteModal setSelected={setSelected} deleteModal={deleteModal} handleDelete={handleDelete}></DeleteModal>
   <ToastContainer hideProgressBar></ToastContainer>
 </div>
 

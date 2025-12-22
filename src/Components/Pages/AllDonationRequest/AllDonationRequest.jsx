@@ -58,7 +58,7 @@ const AllDonationRequest = () => {
                 <button
                   key={page}
                   className={`join-item btn btn-square ${
-                    currentPage === page + 1 ? "btn-active" : ""
+                    currentPage === page + 1 ? "btn-active bg-red-700 text-white" : ""
                   }`}
                   onClick={() => setCurrentPage(page + 1)}
                 >

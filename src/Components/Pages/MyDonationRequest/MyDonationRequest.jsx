@@ -65,14 +65,14 @@ const MyDonationRequest = () => {
           ))}
         </div>
         {/* Pagination */}
-          {totalPages > 1 && (
+          {totalPages >= 1 && (
             <div className="flex justify-center mt-10">
               <div className="join">
                 {[...Array(totalPages).keys()].map((page) => (
                   <button
                     key={page}
                     className={`join-item btn btn-square ${
-                      currentPage === page + 1 ? "btn-active" : ""
+                      currentPage === page + 1 ? "btn-active bg-red-700 text-white" : ""
                     }`}
                     onClick={() => setCurrentPage(page + 1)}
                   >
