@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DonationRequestCard from "../../DonationRequestCard/DonationRequestCard";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../Hooks/useAuth";
+import RequestFilterDropdown from "../../Shared/DropdownSelect/RequestFilterDropdown";
 
 const MyDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
@@ -14,6 +15,13 @@ const MyDonationRequest = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   const totalPages = Math.ceil(totalCount / limit);
+
+  const [filter, setFilter] = useState("All Requests");
+  
+  
+     const handleFilterSelect = (option) => {
+      setFilter(option);
+    };
 
   useEffect(() => {
     if (!user?.email) return;
@@ -49,6 +57,9 @@ const MyDonationRequest = () => {
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">
         My Donation Requests
       </h2>
+      <div className="mb-8 flex lg:justify-end">
+        <RequestFilterDropdown onSelect={handleFilterSelect} />
+      </div>
 
       {requests.length === 0 ? (
         <div className="text-center py-16 text-gray-500">

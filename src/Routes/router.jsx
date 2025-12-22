@@ -20,6 +20,8 @@ import DonationRequestDetails from '../Components/Pages/DonationRequestDetails/D
 import MyDonationRequest from '../Components/Pages/MyDonationRequest/MyDonationRequest';
 import DonationSuccess from '../Components/Pages/Funding/DonationSuccess';
 import DonationCancel from '../Components/Pages/Funding/DonationCancel';
+import AdminRoutes from './AdminRoutes';
+import AdminVolunteerRoute from './AdminVolunteerRoute';
 
 const router = createBrowserRouter([
   {
@@ -79,11 +81,17 @@ const router = createBrowserRouter([
           },
           {
             path: '/dashboard/all-users',
-            Component: AllUsers
+            element:
+            <AdminRoutes>
+              <AllUsers></AllUsers>
+            </AdminRoutes>
           },
           {
             path: '/dashboard/all-blood-donation-request',
-            Component: DonationRequest
+            element:
+            <AdminVolunteerRoute>
+              <DonationRequest></DonationRequest>
+            </AdminVolunteerRoute>
           },
           {
             path: '/dashboard/my-donation-requests',

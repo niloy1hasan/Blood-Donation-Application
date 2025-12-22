@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DonationRequestCard from "../../DonationRequestCard/DonationRequestCard"
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import RequestFilterDropdown from "../../Shared/DropdownSelect/RequestFilterDropdown";
 
 const DonationRequest = () => {
   const axiosSecure = useAxiosSecure();
@@ -8,6 +9,12 @@ const DonationRequest = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [filter, setFilter] = useState("All Requests");
+
+
+   const handleFilterSelect = (option) => {
+    setFilter(option);
+  };
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -46,11 +53,15 @@ const DonationRequest = () => {
 
   return (
     <section className="max-w-7xl min-h-screen mx-auto px-4 py-10">
-      <div className="mb-8">
+      <div>
         <h2 className="text-3xl font-bold text-gray-900">
           Blood Donation Requests
         </h2>
       </div>
+      <div className="mb-8 flex lg:justify-end">
+        <RequestFilterDropdown onSelect={handleFilterSelect} />
+      </div>
+      
 
       {requests.length === 0 ? (
         <p className="text-center text-gray-500">

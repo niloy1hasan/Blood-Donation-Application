@@ -10,7 +10,7 @@ const Sidebar = () => {
         const menuItems = [
                             { icon: <FiHome />, label: "Dashboard", path: "/dashboard", role: ['admin', 'donor', 'volunteer'] },
                             { icon: <FiUsers />, label: "Users", path: "/dashboard/all-users", role: ['admin'] },
-                            { icon: <FiGitPullRequest />, label: "My Requests", path: '/dashboard/my-donation-requests', role: ['donor', 'volunteer'] },
+                            { icon: <FiGitPullRequest />, label: "My Requests", path: '/dashboard/my-donation-requests', role: ['admin', 'donor', 'volunteer'] },
                             { icon: <FiGitPullRequest />, label: "Requests", path: '/dashboard/all-blood-donation-request', role: ['admin', 'volunteer'] },
                             { icon: <FiGitPullRequest />, label: "Create Request", path: "/dashboard/create-donation-request", role: ['admin', 'donor', 'volunteer'] },
                             { icon: <FiUser />, label: "Profile", path: "/dashboard/profile", role: ['admin', 'donor', 'volunteer'] },

@@ -8,6 +8,8 @@ import ActionModal from './UserCard/ActionModal';
 import default_img from '../../../assets/profile-picture.png';
 import UserFilterDropdown from './UserCard/UserFilterDropdown';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import useAuth from '../../../Hooks/useAuth';
+import Forbidden from '../../Forbidden/Forbidden';
 
 const statusColors = {
   active: "text-green-800",
@@ -16,7 +18,7 @@ const statusColors = {
 
 const AllUsers = () => {
     const axiosSecure = useAxiosSecure();
-    
+    const { user } = useAuth();
     const [loadedUsers, setLoadedUsers] = useState([]);
     const [allUser, setAllUser] = useState(loadedUsers);
     const [loading, setLoading] = useState(true);
@@ -111,6 +113,10 @@ const AllUsers = () => {
   const handleFilterSelect = (option) => {
     setFilter(option);
   };
+
+  if(user?.role !== 'admin'){
+    return (<Forbidden></Forbidden>);
+  }
   
     return (
         <>
